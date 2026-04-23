@@ -1,0 +1,76 @@
+<mat-toolbar class="crm-header">
+  <button
+    mat-icon-button
+    class="menu-toggle"
+    (click)="menuToggle.emit()"
+    matTooltip="Toggle sidebar"
+  >
+    <mat-icon>{{ sidenavOpened ? 'menu_open' : 'menu' }}</mat-icon>
+  </button>
+
+  <div class="crm-brand">
+    <mat-icon class="brand-icon">hub</mat-icon>
+    <span class="brand-name">Nexus CRM</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  <!-- Global Search -->
+  <div class="header-search">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input
+      type="text"
+      placeholder="Search tickets, contacts, accounts..."
+      class="search-input"
+    />
+  </div>
+
+  <span class="spacer"></span>
+
+  <!-- Notifications -->
+  <button
+    mat-icon-button
+    class="header-action"
+    matTooltip="Notifications"
+    [matBadge]="notificationCount"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+  >
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <!-- Help -->
+  <button mat-icon-button class="header-action" matTooltip="Help & Support">
+    <mat-icon>help_outline</mat-icon>
+  </button>
+
+  <!-- User Menu -->
+  <button mat-button class="user-menu-btn" [matMenuTriggerFor]="userMenu">
+    <div class="user-avatar">{{ currentUser.avatar }}</div>
+    <div class="user-info">
+      <span class="user-name">{{ currentUser.name }}</span>
+      <span class="user-role">{{ currentUser.role }}</span>
+    </div>
+    <mat-icon>expand_more</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>My Profile</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Settings</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>dark_mode</mat-icon>
+      <span>Dark Mode</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Sign Out</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

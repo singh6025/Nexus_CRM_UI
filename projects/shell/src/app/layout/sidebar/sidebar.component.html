@@ -1,0 +1,44 @@
+<nav class="crm-sidebar-nav">
+  <div class="nav-section">
+    <span class="nav-section-label">MAIN MENU</span>
+    <mat-nav-list class="nav-list">
+      @for (item of navItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-item"
+          [matTooltip]="item.label"
+          matTooltipPosition="right"
+        >
+          <mat-icon matListItemIcon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span matListItemTitle class="nav-label">{{ item.label }}</span>
+          @if (item.badge) {
+            <span class="nav-badge">{{ item.badge }}</span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+  </div>
+
+  <div class="nav-bottom">
+    <mat-divider class="nav-divider"></mat-divider>
+    <mat-nav-list class="nav-list">
+      @for (item of bottomNavItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <mat-icon matListItemIcon class="nav-icon">{{ item.icon }}</mat-icon>
+          <span matListItemTitle class="nav-label">{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidebar-footer">
+      <div class="version-info">Nexus CRM v1.0.0</div>
+    </div>
+  </div>
+</nav>

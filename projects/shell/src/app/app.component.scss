@@ -1,0 +1,27 @@
+.crm-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.crm-sidenav-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.crm-sidenav {
+  width: var(--crm-sidebar-width);
+  background: var(--crm-sidebar-bg);
+  border-right: none;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.crm-content {
+  background: var(--crm-bg);
+}
+
+.crm-main {
+  height: 100%;
+  overflow-y: auto;
+}
