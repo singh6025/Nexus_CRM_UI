@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TicketService } from '../../services/ticket.service';
@@ -45,6 +46,7 @@ import {
     MatMenuModule,
     MatTooltipModule,
     MatDialogModule,
+    MatDividerModule,
     MatSnackBarModule,
   ],
   templateUrl: './ticket-list.component.html',
