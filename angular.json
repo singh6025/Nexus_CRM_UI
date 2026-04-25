@@ -66,16 +66,13 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
-          "options": {
-            "extraWebpackConfig": "projects/shell/webpack.config.js"
-          },
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "shell:build:production"
+              "buildTarget": "shell:build:production"
             },
             "development": {
-              "browserTarget": "shell:build:development"
+              "buildTarget": "shell:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -173,16 +170,14 @@
         "serve": {
           "builder": "ngx-build-plus:dev-server",
           "options": {
-            "port": 4201,
-            "extraWebpackConfig": "projects/tickets-mfe/webpack.config.js",
-            "publicHost": "http://localhost:4201"
+            "port": 4201
           },
           "configurations": {
             "production": {
-              "browserTarget": "tickets-mfe:build:production"
+              "buildTarget": "tickets-mfe:build:production"
             },
             "development": {
-              "browserTarget": "tickets-mfe:build:development"
+              "buildTarget": "tickets-mfe:build:development"
             }
           },
           "defaultConfiguration": "development"

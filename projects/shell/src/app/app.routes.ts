@@ -18,7 +18,7 @@ export const APP_ROUTES: Routes = [
     loadChildren: () =>
       loadRemoteModule({
         type: 'module',
-        remoteEntry: 'http://localhost:4201/remoteEntry.js',
+        remoteEntry: 'http://localhost:4201/assets/remoteEntry.js',
         exposedModule: './Module',
       }).then((m) => m.TICKETS_ROUTES),
     title: 'Tickets – Nexus CRM',

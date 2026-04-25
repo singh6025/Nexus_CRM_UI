@@ -1,0 +1,24 @@
+.crm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--crm-surface);
+  color: rgba(0, 0, 0, 0.65);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+}
+
+.footer-copy,
+.footer-note {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .crm-footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
