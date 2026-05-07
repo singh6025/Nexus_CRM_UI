@@ -1,0 +1,40 @@
+{
+  "name": "mfe-commodities",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mfe-commodities/src",
+  "prefix": "commodities",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mfe-commodities",
+        "index": "apps/mfe-commodities/src/index.html",
+        "main": "apps/mfe-commodities/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/mfe-commodities/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/mfe-commodities/src/favicon.ico"],
+        "styles": ["@angular/material/prebuilt-themes/indigo-pink.css"],
+        "scripts": [],
+        "extraWebpackConfig": "apps/mfe-commodities/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": { "outputHashing": "all" },
+        "development": { "buildOptimizer": false, "optimization": false, "sourceMap": true }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "port": 4208, "extraWebpackConfig": "apps/mfe-commodities/webpack.config.js", "publicHost": "http://localhost:4208" },
+      "configurations": {
+        "production": { "browserTarget": "mfe-commodities:build:production" },
+        "development": { "browserTarget": "mfe-commodities:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

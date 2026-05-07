@@ -1,0 +1,40 @@
+{
+  "name": "mfe-orders",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mfe-orders/src",
+  "prefix": "orders",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mfe-orders",
+        "index": "apps/mfe-orders/src/index.html",
+        "main": "apps/mfe-orders/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/mfe-orders/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/mfe-orders/src/favicon.ico"],
+        "styles": ["@angular/material/prebuilt-themes/indigo-pink.css"],
+        "scripts": [],
+        "extraWebpackConfig": "apps/mfe-orders/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": { "outputHashing": "all" },
+        "development": { "buildOptimizer": false, "optimization": false, "sourceMap": true }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "port": 4205, "extraWebpackConfig": "apps/mfe-orders/webpack.config.js", "publicHost": "http://localhost:4205" },
+      "configurations": {
+        "production": { "browserTarget": "mfe-orders:build:production" },
+        "development": { "browserTarget": "mfe-orders:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

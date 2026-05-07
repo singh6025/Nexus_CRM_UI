@@ -1,0 +1,5 @@
+.back-link  { margin-bottom: 12px; color: var(--color-primary); }
+.form-card  { border-radius: 12px !important; box-shadow: var(--shadow-sm) !important; }
+.ticket-form { display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 12px; padding-top: 8px; }

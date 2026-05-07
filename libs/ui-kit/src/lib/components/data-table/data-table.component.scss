@@ -1,0 +1,32 @@
+.table-progress { position: absolute; left: 0; right: 0; z-index: 10; }
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px 12px 0 0;
+
+  table { width: 100%; }
+}
+
+.clickable { cursor: pointer; &:hover { background: var(--surface-hover) !important; } }
+
+.actions-cell { width: 52px; text-align: center; }
+
+.table-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  &:hover { text-decoration: underline; }
+}
+
+.ui-badge {
+  display: inline-flex; padding: 3px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 600; text-transform: capitalize;
+}
+
+.danger-action { color: var(--color-error); mat-icon { color: var(--color-error); } }
+
+.empty-cell {
+  text-align: center; padding: 60px 20px !important; display: table-cell;
+  mat-icon { font-size: 56px; width: 56px; height: 56px; color: var(--border-color); display: block; margin: 0 auto 12px; }
+  p { color: var(--text-secondary); margin: 0; }
+}

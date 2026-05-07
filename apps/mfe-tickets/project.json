@@ -1,0 +1,40 @@
+{
+  "name": "mfe-tickets",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mfe-tickets/src",
+  "prefix": "tickets",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mfe-tickets",
+        "index": "apps/mfe-tickets/src/index.html",
+        "main": "apps/mfe-tickets/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/mfe-tickets/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/mfe-tickets/src/favicon.ico"],
+        "styles": ["@angular/material/prebuilt-themes/indigo-pink.css"],
+        "scripts": [],
+        "extraWebpackConfig": "apps/mfe-tickets/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": { "outputHashing": "all" },
+        "development": { "buildOptimizer": false, "optimization": false, "sourceMap": true }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "port": 4201, "extraWebpackConfig": "apps/mfe-tickets/webpack.config.js", "publicHost": "http://localhost:4201" },
+      "configurations": {
+        "production": { "browserTarget": "mfe-tickets:build:production" },
+        "development": { "browserTarget": "mfe-tickets:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

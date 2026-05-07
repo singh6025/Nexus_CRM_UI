@@ -1,0 +1,81 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/leads">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">Lead Detail</h1>
+    @if (lead(); as l) {
+      <button mat-stroked-button [routerLink]="['/leads', l.id, 'edit']">
+        <mat-icon>edit</mat-icon> Edit
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (lead(); as l) {
+    <div class="detail-grid">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ l.name }}</mat-card-title>
+          <mat-card-subtitle>{{ l.company }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Email</span>
+              <span class="value">{{ l.email }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Phone</span>
+              <span class="value">{{ l.phone }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Status</span>
+              <ui-badge [variant]="statusVariant(l.status)">{{ l.status | titlecase }}</ui-badge>
+            </div>
+            <div class="info-item">
+              <span class="label">Source</span>
+              <span class="value">{{ l.source | titlecase }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Estimated Value</span>
+              <span class="value">{{ l.estimatedValue | currencyInr }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Assigned To</span>
+              <span class="value">{{ l.assignedTo }}</span>
+            </div>
+            <div class="info-item full">
+              <span class="label">Notes</span>
+              <span class="value">{{ l.notes || '—' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Activity Timeline</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (activities().length === 0) {
+            <p class="empty">No activities yet.</p>
+          } @else {
+            <div class="timeline">
+              @for (act of activities(); track act.id) {
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-body">
+                    <div class="act-desc">{{ act.description }}</div>
+                    <div class="act-meta">{{ act.createdBy }} · {{ act.createdAt | date:'short' }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

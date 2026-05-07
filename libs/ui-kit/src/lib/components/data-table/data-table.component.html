@@ -1,0 +1,83 @@
+@if (loading) {
+  <mat-progress-bar mode="indeterminate" class="table-progress"></mat-progress-bar>
+}
+
+<div class="table-wrapper">
+  <table mat-table [dataSource]="data" matSort (matSortChange)="sortChange.emit($event)">
+
+    @for (col of columns; track col.key) {
+      <ng-container [matColumnDef]="col.key.toString()">
+        <th mat-header-cell *matHeaderCellDef
+            [mat-sort-header]="col.sortable ? col.key.toString() : ''"
+            [disabled]="!col.sortable"
+            [style.width]="col.width">
+          {{ col.label }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          @switch (col.type) {
+            @case ('badge') {
+              <span class="ui-badge badge-{{ col.badgeVariant ? col.badgeVariant(row) : getCellValue(row, col) }}">
+                {{ getCellValue(row, col) }}
+              </span>
+            }
+            @case ('date') {
+              {{ getCellValue(row, col) | date:'dd MMM y' }}
+            }
+            @case ('currency') {
+              ₹{{ getCellValue(row, col) | number:'1.0-0' }}
+            }
+            @case ('link') {
+              <a class="table-link" [routerLink]="col.routerLink ? col.routerLink(row) : []">
+                {{ getCellValue(row, col) }}
+              </a>
+            }
+            @default {
+              {{ getCellValue(row, col) }}
+            }
+          }
+        </td>
+      </ng-container>
+    }
+
+    @if (actions.length) {
+      <ng-container matColumnDef="__actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row" class="actions-cell">
+          <button mat-icon-button [matMenuTriggerFor]="rowMenu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #rowMenu="matMenu">
+            @for (action of visibleActions(row); track action.label) {
+              <button mat-menu-item (click)="action.action(row)" [class.danger-action]="action.danger">
+                <mat-icon>{{ action.icon }}</mat-icon>
+                <span>{{ action.label }}</span>
+              </button>
+            }
+          </mat-menu>
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        [class.clickable]="rowClickable"
+        (click)="rowClickable && rowClick.emit(row)">
+    </tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="empty-cell" [attr.colspan]="displayedColumns.length">
+        <mat-icon>inbox</mat-icon>
+        <p>{{ emptyMessage }}</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<mat-paginator
+  [length]="total"
+  [pageSize]="pageSize"
+  [pageIndex]="page"
+  [pageSizeOptions]="[10, 25, 50, 100]"
+  (page)="pageChange.emit($event)"
+  showFirstLastButtons>
+</mat-paginator>

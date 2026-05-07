@@ -1,0 +1,39 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Welcome back! Here's your overview.</p>
+    </div>
+    <button mat-stroked-button routerLink="/tickets/create">
+      <mat-icon>add</mat-icon> New Ticket
+    </button>
+  </div>
+
+  @if (kpis(); as k) {
+    <div class="kpi-grid">
+      <ui-metric-card
+        label="Total Leads" [value]="k.totalLeads" icon="leaderboard"
+        iconColor="#1565c0" iconBg="#e3f2fd" [trend]="k.totalLeadsDelta">
+      </ui-metric-card>
+      <ui-metric-card
+        label="Open Opportunities" [value]="k.openOpportunities" icon="trending_up"
+        iconColor="#e65100" iconBg="#fff3e0" [trend]="k.openOpportunitiesDelta">
+      </ui-metric-card>
+      <ui-metric-card
+        label="Revenue" [value]="k.totalRevenue | currencyInr" icon="currency_rupee"
+        iconColor="#2e7d32" iconBg="#e8f5e9" [trend]="k.totalRevenueDelta">
+      </ui-metric-card>
+      <ui-metric-card
+        label="Open Tickets" [value]="k.ticketsOpen" icon="confirmation_number"
+        iconColor="#c62828" iconBg="#fce4ec" [trend]="k.ticketsOpenDelta">
+      </ui-metric-card>
+    </div>
+  }
+
+  <div class="dashboard-grid">
+    @if (pipeline(); as p) {
+      <dashboard-pipeline-summary [pipeline]="p"></dashboard-pipeline-summary>
+    }
+    <dashboard-alerts-feed [alerts]="alerts()"></dashboard-alerts-feed>
+  </div>
+</div>

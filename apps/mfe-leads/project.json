@@ -1,0 +1,40 @@
+{
+  "name": "mfe-leads",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mfe-leads/src",
+  "prefix": "leads",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mfe-leads",
+        "index": "apps/mfe-leads/src/index.html",
+        "main": "apps/mfe-leads/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/mfe-leads/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/mfe-leads/src/favicon.ico"],
+        "styles": ["@angular/material/prebuilt-themes/indigo-pink.css"],
+        "scripts": [],
+        "extraWebpackConfig": "apps/mfe-leads/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": { "outputHashing": "all" },
+        "development": { "buildOptimizer": false, "optimization": false, "sourceMap": true }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "port": 4203, "extraWebpackConfig": "apps/mfe-leads/webpack.config.js", "publicHost": "http://localhost:4203" },
+      "configurations": {
+        "production": { "browserTarget": "mfe-leads:build:production" },
+        "development": { "browserTarget": "mfe-leads:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

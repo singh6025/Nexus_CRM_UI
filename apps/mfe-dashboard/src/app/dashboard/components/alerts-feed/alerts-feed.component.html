@@ -1,0 +1,33 @@
+<mat-card class="alerts-card">
+  <mat-card-header>
+    <mat-card-title>Recent Alerts</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (alerts().length === 0) {
+      <div class="empty-state">
+        <mat-icon>notifications_none</mat-icon>
+        <p>No alerts at the moment</p>
+      </div>
+    } @else {
+      <div class="alerts-list">
+        @for (alert of alerts(); track alert.id) {
+          <div class="alert-item" [class.unread]="!alert.read">
+            <div class="alert-icon" [style.background]="colorMap[alert.type] + '1a'">
+              <mat-icon [style.color]="colorMap[alert.type]">{{ iconMap[alert.type] }}</mat-icon>
+            </div>
+            <div class="alert-body">
+              <div class="alert-title">{{ alert.title }}</div>
+              <div class="alert-message">{{ alert.message }}</div>
+            </div>
+            @if (!alert.read) {
+              <button mat-icon-button (click)="markRead.emit(alert.id)" class="mark-read-btn" title="Mark as read">
+                <mat-icon>check_circle_outline</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "outDir": "../../out-tsc/apps/mfe-farmers", "types": ["node"] },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts"]
+}

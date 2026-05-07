@@ -1,0 +1,40 @@
+{
+  "name": "mfe-dashboard",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mfe-dashboard/src",
+  "prefix": "dashboard",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mfe-dashboard",
+        "index": "apps/mfe-dashboard/src/index.html",
+        "main": "apps/mfe-dashboard/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/mfe-dashboard/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/mfe-dashboard/src/favicon.ico"],
+        "styles": ["@angular/material/prebuilt-themes/indigo-pink.css"],
+        "scripts": [],
+        "extraWebpackConfig": "apps/mfe-dashboard/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": { "outputHashing": "all" },
+        "development": { "buildOptimizer": false, "optimization": false, "sourceMap": true }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "port": 4202, "extraWebpackConfig": "apps/mfe-dashboard/webpack.config.js", "publicHost": "http://localhost:4202" },
+      "configurations": {
+        "production": { "browserTarget": "mfe-dashboard:build:production" },
+        "development": { "browserTarget": "mfe-dashboard:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

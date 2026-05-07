@@ -1,0 +1,94 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/leads">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">{{ isEdit() ? 'Edit Lead' : 'New Lead' }}</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-card">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="name">
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Company</mat-label>
+        <input matInput formControlName="company">
+        @if (form.controls.company.hasError('required')) {
+          <mat-error>Company is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email">
+        @if (form.controls.email.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+        } @else if (form.controls.email.hasError('email')) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+        @if (form.controls.phone.hasError('required')) {
+          <mat-error>Phone is required</mat-error>
+        } @else if (form.controls.phone.hasError('invalidPhone')) {
+          <mat-error>Enter a valid 10-digit Indian number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          @for (s of statusOptions; track s) {
+            <mat-option [value]="s">{{ s | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Source</mat-label>
+        <mat-select formControlName="source">
+          @for (s of sourceOptions; track s) {
+            <mat-option [value]="s">{{ s | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned To</mat-label>
+        <input matInput formControlName="assignedTo">
+        @if (form.controls.assignedTo.hasError('required')) {
+          <mat-error>Assigned to is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estimated Value (₹)</mat-label>
+        <input matInput formControlName="estimatedValue" type="number" min="0">
+        @if (form.controls.estimatedValue.hasError('positiveNumber')) {
+          <mat-error>Must be a positive number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/leads">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Saving…' : (isEdit() ? 'Update Lead' : 'Create Lead') }}
+      </button>
+    </div>
+  </form>
+</div>

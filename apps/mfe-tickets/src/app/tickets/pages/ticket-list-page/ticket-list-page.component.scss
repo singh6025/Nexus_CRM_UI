@@ -1,0 +1,7 @@
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.page-title  { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
+.page-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0; }
+.filter-row  { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-search { flex: 1; min-width: 220px; }
+.filter-select { width: 160px; }
+.table-card  { background: var(--surface-card); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; position: relative; }

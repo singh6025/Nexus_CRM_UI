@@ -1,0 +1,30 @@
+<mat-card class="pipeline-card">
+  <mat-card-header>
+    <mat-card-title>Sales Pipeline</mat-card-title>
+    <div class="totals">
+      <span class="total-deals">{{ pipeline().totalDeals }} deals</span>
+      <span class="total-value">{{ pipeline().totalValue | currencyInr }}</span>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="stages">
+      @for (stage of pipeline().stages; track stage.stage) {
+        <div class="stage-row">
+          <div class="stage-label">{{ stage.stage }}</div>
+          <div class="stage-bar-wrap">
+            <div
+              class="stage-bar"
+              [style.width.%]="pipeline().totalDeals ? (stage.count / pipeline().totalDeals) * 100 : 0"
+              [style.background]="stage.color">
+            </div>
+          </div>
+          <div class="stage-meta">
+            <span class="stage-count">{{ stage.count }}</span>
+            <span class="stage-value">{{ stage.value | currencyInr }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>

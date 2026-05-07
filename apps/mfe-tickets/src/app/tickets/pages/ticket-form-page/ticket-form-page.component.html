@@ -1,0 +1,74 @@
+<div class="page-container" style="max-width:720px">
+  <a mat-button routerLink="/tickets" class="back-link"><mat-icon>arrow_back</mat-icon> Tickets</a>
+
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEdit() ? 'Edit Ticket' : 'Create Ticket' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="ticket-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Title *</mat-label>
+          <input matInput formControlName="title" maxlength="200" />
+          @if (form.get('title')?.invalid && form.get('title')?.touched) {
+            <mat-error>Title must be at least 5 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description *</mat-label>
+          <textarea matInput formControlName="description" rows="5" placeholder="Describe the issue in detail…"></textarea>
+          @if (form.get('description')?.invalid && form.get('description')?.touched) {
+            <mat-error>Description must be at least 10 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Status *</mat-label>
+            <mat-select formControlName="status">
+              @for (s of statusOptions; track s) {
+                <mat-option [value]="s">{{ s | titlecase }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Priority *</mat-label>
+            <mat-select formControlName="priority">
+              @for (p of priorityOptions; track p) {
+                <mat-option [value]="p">{{ p | titlecase }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Assignee *</mat-label>
+          <mat-select formControlName="assigneeId">
+            @for (m of teamMembers; track m.id) {
+              <mat-option [value]="m.id">{{ m.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('assigneeId')?.invalid && form.get('assigneeId')?.touched) {
+            <mat-error>Please assign this ticket</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tags (comma-separated)</mat-label>
+          <input matInput formControlName="tags" placeholder="frontend, auth, bug" />
+          <mat-hint>Separate tags with commas</mat-hint>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button type="button" mat-stroked-button routerLink="/tickets">Cancel</button>
+          <button type="submit" mat-raised-button color="primary" [disabled]="loading()">
+            @if (loading()) { <mat-spinner diameter="18"></mat-spinner> }
+            @else { <mat-icon>{{ isEdit() ? 'save' : 'add_circle' }}</mat-icon> {{ isEdit() ? 'Save Changes' : 'Create Ticket' }} }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,50 @@
+<div class="kanban-board">
+  @for (lane of lanes; track lane.id) {
+    <div class="kanban-lane">
+      <div class="lane-header" [style.border-top-color]="lane.color">
+        <span class="lane-label">{{ lane.label }}</span>
+        <div class="lane-meta">
+          <span class="lane-count">{{ lane.items.length }}</span>
+          @if (lane.totalValue !== undefined) {
+            <span class="lane-value">₹{{ lane.totalValue | number:'1.0-0' }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="lane-body"
+           cdkDropList
+           [id]="lane.id"
+           [cdkDropListData]="lane.items"
+           [cdkDropListConnectedTo]="laneIds"
+           (cdkDropListDropped)="onDrop($event, lane)">
+
+        @for (item of lane.items; track $index) {
+          <div class="kanban-card" cdkDrag [cdkDragData]="item">
+            <div class="card-drag-handle" cdkDragHandle>
+              <span class="drag-dots">⋮⋮</span>
+            </div>
+            <div class="card-content">
+              @if (routerLinkFn) {
+                <a class="card-title" [routerLink]="routerLinkFn(item)">
+                  {{ item[titleKey] }}
+                </a>
+              } @else {
+                <span class="card-title">{{ item[titleKey] }}</span>
+              }
+              @if (subtitleKey && item[subtitleKey]) {
+                <span class="card-subtitle">{{ item[subtitleKey] }}</span>
+              }
+              @if (valueKey && item[valueKey]) {
+                <span class="card-value">₹{{ item[valueKey] | number:'1.0-0' }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        @if (!lane.items.length) {
+          <div class="empty-lane">Drop items here</div>
+        }
+      </div>
+    </div>
+  }
+</div>

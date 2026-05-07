@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "farmeasy",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": []
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["default"]
+    },
+    "test": {
+      "inputs": ["default"]
+    },
+    "lint": {
+      "inputs": ["default"]
+    }
+  },
+  "defaultProject": "shell"
+}

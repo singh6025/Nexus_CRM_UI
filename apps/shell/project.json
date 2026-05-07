@@ -1,0 +1,54 @@
+{
+  "name": "shell",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/shell/src",
+  "prefix": "crm",
+  "targets": {
+    "build": {
+      "executor": "ngx-build-plus:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/shell",
+        "index": "apps/shell/src/index.html",
+        "main": "apps/shell/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/shell/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/shell/src/favicon.ico", "apps/shell/src/assets"],
+        "styles": [
+          "@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/shell/src/styles.scss"
+        ],
+        "scripts": [],
+        "extraWebpackConfig": "apps/shell/webpack.config.js",
+        "commonChunk": false
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "all",
+          "budgets": [
+            { "type": "initial", "maximumWarning": "3mb", "maximumError": "6mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "6kb", "maximumError": "12kb" }
+          ],
+          "extraWebpackConfig": "apps/shell/webpack.prod.config.js"
+        },
+        "development": {
+          "buildOptimizer": false, "optimization": false,
+          "vendorChunk": true, "extractLicenses": false,
+          "sourceMap": true, "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "ngx-build-plus:dev-server",
+      "options": { "extraWebpackConfig": "apps/shell/webpack.config.js" },
+      "configurations": {
+        "production": { "browserTarget": "shell:build:production" },
+        "development": { "browserTarget": "shell:build:development" }
+      },
+      "defaultConfiguration": "development"
+    }
+  }
+}

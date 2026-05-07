@@ -1,0 +1,89 @@
+<div class="shell">
+  <!-- Header -->
+  <mat-toolbar class="shell-header">
+    <button mat-icon-button (click)="appStore.toggleSidenav()">
+      <mat-icon>{{ appStore.sidenavOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+
+    <div class="brand">
+      <mat-icon class="brand-icon">eco</mat-icon>
+      <span class="brand-name">FarmEasy CRM</span>
+    </div>
+
+    <span class="spacer"></span>
+
+    <!-- WS indicator -->
+    <span class="ws-dot" [class.connected]="appStore.wsConnected()"
+          [matTooltip]="appStore.wsConnected() ? 'Live' : 'Offline'"></span>
+
+    <!-- Notifications -->
+    <button mat-icon-button [matMenuTriggerFor]="notifMenu"
+            [matBadge]="appStore.unreadCount() || null" matBadgeColor="warn" matBadgeSize="small">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <mat-menu #notifMenu="matMenu" class="notif-menu">
+      <div class="notif-header">
+        <span>Notifications</span>
+        <button mat-button (click)="appStore.markAllRead()">Mark all read</button>
+      </div>
+      @for (n of appStore.unreadNotifications(); track n.id) {
+        <button mat-menu-item (click)="appStore.markRead(n.id)">
+          <mat-icon [class]="'notif-icon-' + n.type">notifications</mat-icon>
+          <div class="notif-body">
+            <span class="notif-title">{{ n.title }}</span>
+            <span class="notif-msg">{{ n.message }}</span>
+          </div>
+        </button>
+      }
+      @if (!appStore.unreadCount()) {
+        <p class="notif-empty">No unread notifications</p>
+      }
+    </mat-menu>
+
+    <!-- User menu -->
+    <button mat-button class="user-btn" [matMenuTriggerFor]="userMenu">
+      <div class="avatar">{{ authStore.displayName().charAt(0) }}</div>
+      <span class="user-name">{{ authStore.displayName() }}</span>
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      <div class="user-role-label">{{ authStore.userRole() | titlecase }}</div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item><mat-icon>person</mat-icon>Profile</button>
+      <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Sign Out</button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <!-- Sidenav -->
+  <mat-sidenav-container class="shell-body">
+    <mat-sidenav [opened]="appStore.sidenavOpen()" mode="side" [fixedInViewport]="true" [fixedTopGap]="64" class="shell-sidenav">
+      <nav class="sidenav-nav">
+        <mat-nav-list class="nav-list">
+          @for (item of navItems; track item.route) {
+            <a mat-list-item [routerLink]="item.route" routerLinkActive="active" class="nav-item">
+              <mat-icon matListItemIcon class="nav-icon">{{ item.icon }}</mat-icon>
+              <span matListItemTitle class="nav-label">{{ item.label }}</span>
+            </a>
+          }
+        </mat-nav-list>
+
+        <div class="nav-bottom">
+          <mat-divider class="nav-divider"></mat-divider>
+          <mat-nav-list>
+            @for (item of bottomNavItems; track item.route) {
+              <a mat-list-item [routerLink]="item.route" routerLinkActive="active" class="nav-item">
+                <mat-icon matListItemIcon class="nav-icon">{{ item.icon }}</mat-icon>
+                <span matListItemTitle class="nav-label">{{ item.label }}</span>
+              </a>
+            }
+          </mat-nav-list>
+          <p class="version">v1.0.0</p>
+        </div>
+      </nav>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="shell-content">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

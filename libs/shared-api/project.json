@@ -1,0 +1,23 @@
+{
+  "name": "shared-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/shared-api/src",
+  "prefix": "farmeasy",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared-api",
+        "main": "libs/shared-api/src/index.ts",
+        "tsConfig": "libs/shared-api/tsconfig.lib.json",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": { "lintFilePatterns": ["libs/shared-api/**/*.ts"] }
+    }
+  }
+}

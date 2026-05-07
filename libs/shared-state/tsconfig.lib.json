@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "outDir": "../../out-tsc/libs/shared-state", "declaration": true, "types": ["node"] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts"]
+}

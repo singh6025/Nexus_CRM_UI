@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "outDir": "../../out-tsc/libs/shared-auth", "declaration": true, "types": ["node"] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["**/*.spec.ts"]
+}

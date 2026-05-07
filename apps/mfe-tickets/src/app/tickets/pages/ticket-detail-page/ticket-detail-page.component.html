@@ -1,0 +1,83 @@
+@if (ticket(); as t) {
+<div class="page-container detail-layout">
+  <div class="detail-main">
+    <mat-card class="detail-card">
+      <mat-card-content>
+        <div class="ticket-top">
+          <span class="ticket-id">{{ t.id }}</span>
+          <div class="ticket-badges">
+            <ui-badge [label]="t.status" [variant]="t.status"></ui-badge>
+            <ui-badge [label]="t.priority" [variant]="t.priority"></ui-badge>
+          </div>
+          <span class="spacer"></span>
+          <button mat-stroked-button [routerLink]="['..', t.id, 'edit']"><mat-icon>edit</mat-icon> Edit</button>
+          <button mat-icon-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon></button>
+        </div>
+        <h1 class="ticket-title">{{ t.title }}</h1>
+        <p class="ticket-desc">{{ t.description }}</p>
+        <div class="ticket-tags">
+          @for (tag of t.tags; track tag) {
+            <span class="tag">{{ tag }}</span>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Comments -->
+    <mat-card class="detail-card">
+      <mat-card-header><mat-card-title>Comments ({{ t.comments.length }})</mat-card-title></mat-card-header>
+      <mat-card-content>
+        @for (c of t.comments; track c.id) {
+          <div class="comment">
+            <div class="c-avatar">{{ c.authorName.charAt(0) }}</div>
+            <div class="c-body">
+              <div class="c-header">
+                <b>{{ c.authorName }}</b>
+                <span class="c-date">{{ c.createdAt | date:'dd MMM y, HH:mm' }}</span>
+              </div>
+              <p class="c-text">{{ c.content }}</p>
+            </div>
+          </div>
+        }
+        <mat-divider class="mt-16 mb-16"></mat-divider>
+        <div class="add-comment">
+          <mat-form-field appearance="outline">
+            <mat-label>Add a comment</mat-label>
+            <textarea matInput [(ngModel)]="newComment" rows="3"></textarea>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="addComment()" [disabled]="!newComment.trim()">
+            <mat-icon>send</mat-icon> Post
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="detail-sidebar">
+    <mat-card class="detail-card">
+      <mat-card-header><mat-card-title>Details</mat-card-title></mat-card-header>
+      <mat-card-content class="details-list">
+        <div class="detail-field">
+          <span class="field-label">Status</span>
+          <mat-form-field appearance="outline" class="sidebar-select">
+            <mat-select [value]="t.status" (selectionChange)="changeStatus($event.value)">
+              @for (opt of statusOptions; track opt.value) {
+                <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="detail-field"><span class="field-label">Assignee</span><span>{{ t.assigneeName }}</span></div>
+        <mat-divider></mat-divider>
+        <div class="detail-field"><span class="field-label">Reporter</span><span>{{ t.reporterName }}</span></div>
+        <mat-divider></mat-divider>
+        <div class="detail-field"><span class="field-label">Created</span><span>{{ t.createdAt | date:'dd MMM y' }}</span></div>
+        <mat-divider></mat-divider>
+        <div class="detail-field"><span class="field-label">Updated</span><span>{{ t.updatedAt | date:'dd MMM y, HH:mm' }}</span></div>
+      </mat-card-content>
+    </mat-card>
+  </aside>
+</div>
+}
