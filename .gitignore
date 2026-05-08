@@ -28,6 +28,10 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Nx cache
+.nx/cache
+.nx/workspace-data
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
