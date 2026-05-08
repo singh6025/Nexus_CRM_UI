@@ -1,0 +1,26 @@
+.supply-demand-page {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.filters {
+  display: flex;
+}
+
+.filter-search {
+  width: 300px;
+}

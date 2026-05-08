@@ -4,6 +4,11 @@ export const ANALYTICS_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./pages/analytics-list-page/analytics-list-page.component').then((m) => m.AnalyticsListPageComponent),
+      import('./pages/analytics-dashboard-page/analytics-dashboard-page.component').then((m) => m.AnalyticsDashboardPageComponent),
+  },
+  {
+    path: 'supply-demand',
+    loadComponent: () =>
+      import('./pages/supply-demand-page/supply-demand-page.component').then((m) => m.SupplyDemandPageComponent),
   },
 ];
