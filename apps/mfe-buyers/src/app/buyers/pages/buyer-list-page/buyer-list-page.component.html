@@ -1,0 +1,46 @@
+<div class="buyer-list-page">
+  <header class="page-header">
+    <h1>Buyers</h1>
+    <a mat-raised-button color="primary" routerLink="/buyers/new">
+      <mat-icon>add</mat-icon> Add Buyer
+    </a>
+  </header>
+
+  <div class="filters" [formGroup]="filters">
+    <mat-form-field appearance="outline" class="filter-search">
+      <mat-label>Search</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput formControlName="search" placeholder="Name, company, phone…" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (opt of statusOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Tier</mat-label>
+      <mat-select formControlName="tier">
+        @for (opt of tierOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <farmeasy-data-table
+    [columns]="columns"
+    [data]="buyers()"
+    [total]="total()"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [loading]="loading()"
+    [actions]="actions"
+    (sortChange)="onSort($event)"
+    (pageChange)="onPage($event)"
+  />
+</div>

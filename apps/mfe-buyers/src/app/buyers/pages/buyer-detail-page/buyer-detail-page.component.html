@@ -1,0 +1,155 @@
+<div class="buyer-detail-page">
+  @if (loading()) {
+    <p class="loading">Loading…</p>
+  } @else if (buyer(); as b) {
+    <header class="page-header">
+      <div class="header-left">
+        <button mat-icon-button routerLink="/buyers" aria-label="Back">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <h1>{{ b.name }}</h1>
+          <p class="subtitle">{{ b.companyName }}</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <mat-form-field appearance="outline" class="status-select">
+          <mat-label>Status</mat-label>
+          <mat-select [ngModel]="b.status" (ngModelChange)="onStatusChange($event)">
+            @for (s of statusOptions; track s) {
+              <mat-option [value]="s">{{ statusConfig[s].label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <a mat-stroked-button [routerLink]="['/buyers', b.id, 'edit']">
+          <mat-icon>edit</mat-icon> Edit
+        </a>
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    </header>
+
+    <div class="content-grid">
+      <!-- GMV Summary -->
+      <mat-card class="card-full">
+        <mat-card-header>
+          <mat-card-title>GMV Summary</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-label">GMV (All Time)</span>
+              <span class="stat-value">{{ b.gmvAllTime | currencyInr }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">GMV (YTD)</span>
+              <span class="stat-value">{{ b.gmvCurrentYear | currencyInr }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total Orders</span>
+              <span class="stat-value">{{ b.totalOrders }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Avg Order Value</span>
+              <span class="stat-value">{{ b.avgOrderValue | currencyInr }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Last Order</span>
+              <span class="stat-value">{{ b.lastOrderDate ? (b.lastOrderDate | date:'mediumDate') : '—' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Contact Info -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Contact</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-list">
+            <div class="info-row">
+              <mat-icon>phone</mat-icon>
+              <span>{{ b.phone }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>email</mat-icon>
+              <span>{{ b.email }}</span>
+            </div>
+            <div class="info-row">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ b.city }}, {{ b.state }}</span>
+            </div>
+            @if (b.gstNumber) {
+              <div class="info-row">
+                <mat-icon>business</mat-icon>
+                <span>GST: {{ b.gstNumber }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Classification -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Classification</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label">Tier</span>
+              <farmeasy-badge [label]="tierConfig[b.tier].label" variant="info" />
+            </div>
+            <div class="info-row">
+              <span class="info-label">Status</span>
+              <farmeasy-badge [label]="statusConfig[b.status].label" [variant]="statusConfig[b.status].variant" />
+            </div>
+            <div class="info-row">
+              <span class="info-label">Agent</span>
+              <span>{{ b.assignedAgentName }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Recent Deals -->
+      <mat-card class="card-full">
+        <mat-card-header>
+          <mat-card-title>Recent Deals</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (b.recentDeals.length === 0) {
+            <p class="empty">No deals yet.</p>
+          } @else {
+            <table class="deals-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Commodity</th>
+                  <th>Qty (kg)</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (deal of b.recentDeals; track deal.orderId) {
+                  <tr>
+                    <td>{{ deal.orderNumber }}</td>
+                    <td>{{ deal.commodity }}</td>
+                    <td>{{ deal.quantityKg | number }}</td>
+                    <td>{{ deal.amount | currencyInr }}</td>
+                    <td>{{ deal.date | date:'mediumDate' }}</td>
+                    <td>{{ deal.status }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
