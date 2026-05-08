@@ -1,0 +1,131 @@
+<div class="commodity-detail-page">
+  @if (loading()) {
+    <p class="loading">Loading…</p>
+  } @else if (commodity(); as c) {
+    <header class="page-header">
+      <div class="header-left">
+        <button mat-icon-button routerLink="/commodities" aria-label="Back">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div>
+          <h1>{{ c.name }}</h1>
+          <div class="badges">
+            <farmeasy-badge [label]="categoryConfig[c.category].label" [variant]="categoryConfig[c.category].variant" />
+            <farmeasy-badge [label]="gradeConfig[c.grade].label" [variant]="gradeConfig[c.grade].variant" />
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a mat-stroked-button [routerLink]="['/commodities', c.id, 'edit']">
+          <mat-icon>edit</mat-icon> Edit
+        </a>
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    </header>
+
+    <div class="content-grid">
+      <!-- Price summary -->
+      <mat-card class="card-full">
+        <mat-card-header>
+          <mat-card-title>Price Overview</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stats-row">
+            <div class="stat">
+              <span class="stat-label">Current Price</span>
+              <span class="stat-value">{{ c.currentPrice | currencyInr }} / {{ c.unit }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Price Change</span>
+              <span class="stat-value" [class]="priceChangeClass(c.priceChangePct)">
+                <mat-icon>{{ priceChangeIcon(c.priceChangePct) }}</mat-icon>
+                {{ c.priceChangePct | number:'1.1-2' }}%
+              </span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Weekly High</span>
+              <span class="stat-value">{{ c.weeklyHigh | currencyInr }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Weekly Low</span>
+              <span class="stat-value">{{ c.weeklyLow | currencyInr }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Active Orders</span>
+              <span class="stat-value">{{ c.activeOrders }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Total Supply</span>
+              <span class="stat-value">{{ c.totalSupplyKg | number }} kg</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Mandi Prices -->
+      <mat-card class="card-full">
+        <mat-card-header>
+          <mat-card-title>Mandi Prices</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (c.mandiPrices.length === 0) {
+            <p class="empty">No mandi data available.</p>
+          } @else {
+            <table class="mandi-table">
+              <thead>
+                <tr>
+                  <th>Mandi</th>
+                  <th>State</th>
+                  <th>Min Price</th>
+                  <th>Max Price</th>
+                  <th>Modal Price</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (mp of c.mandiPrices; track mp.mandiName) {
+                  <tr>
+                    <td>{{ mp.mandiName }}</td>
+                    <td>{{ mp.state }}</td>
+                    <td>{{ mp.minPrice | currencyInr }}</td>
+                    <td>{{ mp.maxPrice | currencyInr }}</td>
+                    <td class="modal-price">{{ mp.modalPrice | currencyInr }}</td>
+                    <td>{{ mp.date | date:'mediumDate' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Price Trend (last 30 days) -->
+      <mat-card class="card-full">
+        <mat-card-header>
+          <mat-card-title>30-Day Price Trend</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (c.priceTrends.length === 0) {
+            <p class="empty">No trend data available.</p>
+          } @else {
+            <div class="trend-list">
+              @for (pt of c.priceTrends; track pt.date) {
+                <div class="trend-row">
+                  <span class="trend-date">{{ pt.date | date:'d MMM' }}</span>
+                  <div class="trend-bar-wrap">
+                    <div class="trend-bar"
+                         [style.width.%]="(pt.price / c.weeklyHigh) * 100">
+                    </div>
+                  </div>
+                  <span class="trend-val">{{ pt.price | currencyInr }}</span>
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
