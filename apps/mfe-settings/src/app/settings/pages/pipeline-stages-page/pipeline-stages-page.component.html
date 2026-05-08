@@ -1,0 +1,76 @@
+<div class="pipeline-stages-page">
+  <header class="page-header">
+    <div class="header-left">
+      <button mat-icon-button routerLink="/settings" aria-label="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Pipeline Stages</h1>
+    </div>
+    <button mat-raised-button color="primary" (click)="showForm.set(!showForm())">
+      <mat-icon>add</mat-icon> Add Stage
+    </button>
+  </header>
+
+  @if (showForm()) {
+    <mat-card class="stage-form-card">
+      <mat-card-header>
+        <mat-card-title>New Stage</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submitStage()" novalidate class="stage-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Stage Name</mat-label>
+            <input matInput formControlName="name" />
+            @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+              <mat-error>Name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="color-field">
+            <mat-label>Color</mat-label>
+            <input matInput formControlName="color" type="color" />
+          </mat-form-field>
+
+          <div class="checkboxes">
+            <mat-checkbox formControlName="isWon">Closed Won</mat-checkbox>
+            <mat-checkbox formControlName="isLost">Closed Lost</mat-checkbox>
+          </div>
+
+          <div class="form-actions">
+            <button mat-stroked-button type="button" (click)="showForm.set(false)">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="saving()">
+              @if (saving()) { Saving… } @else { Create Stage }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (loading()) {
+    <p class="loading">Loading…</p>
+  } @else if (stages().length === 0) {
+    <p class="empty">No pipeline stages configured.</p>
+  } @else {
+    <div class="stages-list">
+      @for (stage of stages(); track stage.id) {
+        <mat-card class="stage-row">
+          <mat-card-content>
+            <div class="stage-color" [style.background]="stage.color"></div>
+            <div class="stage-info">
+              <span class="stage-name">{{ stage.name }}</span>
+              <div class="stage-tags">
+                @if (stage.isWon) { <span class="tag won">Won</span> }
+                @if (stage.isLost) { <span class="tag lost">Lost</span> }
+              </div>
+            </div>
+            <span class="stage-order">#{{ stage.order }}</span>
+            <button mat-icon-button color="warn" (click)="deleteStage(stage)" aria-label="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

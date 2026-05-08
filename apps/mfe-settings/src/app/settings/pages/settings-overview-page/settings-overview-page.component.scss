@@ -1,0 +1,74 @@
+.settings-overview-page {
+  padding: 24px;
+  max-width: 720px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.sections-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+.section-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--mat-sys-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    color: var(--mat-sys-on-primary-container);
+    font-size: 1.5rem;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.section-text {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.chevron {
+  color: var(--mat-sys-on-surface-variant);
+}
