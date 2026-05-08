@@ -31,8 +31,8 @@
       "executor": "ngx-build-plus:dev-server",
       "options": { "port": 4210, "extraWebpackConfig": "apps/mfe-settings/webpack.config.js", "publicHost": "http://localhost:4210" },
       "configurations": {
-        "production": { "browserTarget": "mfe-settings:build:production" },
-        "development": { "browserTarget": "mfe-settings:build:development" }
+        "production": { "buildTarget": "mfe-settings:build:production" },
+        "development": { "buildTarget": "mfe-settings:build:development" }
       },
       "defaultConfiguration": "development"
     }

@@ -31,8 +31,8 @@
       "executor": "ngx-build-plus:dev-server",
       "options": { "port": 4201, "extraWebpackConfig": "apps/mfe-tickets/webpack.config.js", "publicHost": "http://localhost:4201" },
       "configurations": {
-        "production": { "browserTarget": "mfe-tickets:build:production" },
-        "development": { "browserTarget": "mfe-tickets:build:development" }
+        "production": { "buildTarget": "mfe-tickets:build:production" },
+        "development": { "buildTarget": "mfe-tickets:build:development" }
       },
       "defaultConfiguration": "development"
     }

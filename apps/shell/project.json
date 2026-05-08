@@ -45,8 +45,8 @@
       "executor": "ngx-build-plus:dev-server",
       "options": { "extraWebpackConfig": "apps/shell/webpack.config.js" },
       "configurations": {
-        "production": { "browserTarget": "shell:build:production" },
-        "development": { "browserTarget": "shell:build:development" }
+        "production": { "buildTarget": "shell:build:production" },
+        "development": { "buildTarget": "shell:build:development" }
       },
       "defaultConfiguration": "development"
     }
