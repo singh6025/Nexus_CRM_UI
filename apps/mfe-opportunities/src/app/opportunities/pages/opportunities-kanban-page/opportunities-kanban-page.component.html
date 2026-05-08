@@ -1,0 +1,31 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Opportunities</h1>
+      <p class="page-subtitle">
+        Pipeline value:
+        <strong>₹{{ totalPipelineValue() | number:'1.0-0' }}</strong>
+        &nbsp;·&nbsp;
+        {{ opportunities().length }} deals
+      </p>
+    </div>
+    <button mat-flat-button color="primary" routerLink="new">
+      <mat-icon>add</mat-icon> New Deal
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-bar">
+      <div class="loading-indicator"></div>
+    </div>
+  } @else {
+    <ui-kanban-board
+      [lanes]="lanes()"
+      titleKey="name"
+      subtitleKey="company"
+      valueKey="dealValue"
+      [routerLinkFn]="routerLinkFn"
+      (dropped)="onDrop($event)">
+    </ui-kanban-board>
+  }
+</div>

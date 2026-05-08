@@ -1,0 +1,81 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/opportunities">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">{{ isEdit() ? 'Edit Deal' : 'New Deal' }}</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-card">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Deal Name</mat-label>
+        <input matInput formControlName="name">
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>Deal name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Company</mat-label>
+        <input matInput formControlName="company">
+        @if (form.controls.company.hasError('required')) {
+          <mat-error>Company is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Deal Value (₹)</mat-label>
+        <input matInput formControlName="dealValue" type="number" min="0">
+        @if (form.controls.dealValue.hasError('positiveNumber')) {
+          <mat-error>Must be a positive number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Probability (%)</mat-label>
+        <input matInput formControlName="probability" type="number" min="0" max="100">
+        @if (form.controls.probability.hasError('min') || form.controls.probability.hasError('max')) {
+          <mat-error>Must be between 0 and 100</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Stage</mat-label>
+        <mat-select formControlName="stage">
+          @for (cfg of stageConfigs; track cfg.id) {
+            <mat-option [value]="cfg.id">{{ cfg.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned To</mat-label>
+        <input matInput formControlName="assignedTo">
+        @if (form.controls.assignedTo.hasError('required')) {
+          <mat-error>Assigned to is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Expected Close Date</mat-label>
+        <input matInput formControlName="expectedCloseDate" type="date">
+        @if (form.controls.expectedCloseDate.hasError('required')) {
+          <mat-error>Close date is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/opportunities">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Saving…' : (isEdit() ? 'Update Deal' : 'Create Deal') }}
+      </button>
+    </div>
+  </form>
+</div>

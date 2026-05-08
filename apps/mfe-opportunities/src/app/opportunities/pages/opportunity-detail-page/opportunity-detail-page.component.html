@@ -1,0 +1,76 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/opportunities">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">Deal Detail</h1>
+    @if (opportunity(); as opp) {
+      <div class="header-actions">
+        <button mat-stroked-button [routerLink]="['/opportunities', opp.id, 'edit']">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (opportunity(); as opp) {
+    <div class="detail-grid">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ opp.name }}</mat-card-title>
+          <mat-card-subtitle>{{ opp.company }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Deal Value</span>
+              <span class="value value--highlight">{{ opp.dealValue | currencyInr }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Probability</span>
+              <span class="value">{{ opp.probability }}%</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Expected Close</span>
+              <span class="value">{{ opp.expectedCloseDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Assigned To</span>
+              <span class="value">{{ opp.assignedTo }}</span>
+            </div>
+            <div class="info-item full">
+              <span class="label">Notes</span>
+              <span class="value">{{ opp.notes || '—' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stage-card">
+        <mat-card-header>
+          <mat-card-title>Pipeline Stage</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stage-list">
+            @for (cfg of stageConfigs; track cfg.id) {
+              <div
+                class="stage-step"
+                [class.active]="opp.stage === cfg.id"
+                [class.done]="isBeforeCurrentStage(cfg.id, opp.stage)"
+                (click)="onStageChange(cfg.id)"
+                [style.--stage-color]="cfg.color">
+                <div class="step-dot"></div>
+                <span class="step-label">{{ cfg.label }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>
