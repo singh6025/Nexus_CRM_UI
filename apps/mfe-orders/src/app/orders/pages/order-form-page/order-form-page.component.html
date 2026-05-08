@@ -1,0 +1,95 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/orders"><mat-icon>arrow_back</mat-icon></button>
+    <h1 class="page-title">{{ isEdit() ? 'Edit Order' : 'New Order' }}</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <div class="section-card">
+      <h2 class="section-title">Order Details</h2>
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Buyer ID</mat-label>
+          <input matInput formControlName="buyerId">
+          @if (form.controls.buyerId.hasError('required')) {
+            <mat-error>Buyer is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Logistics Partner</mat-label>
+          <input matInput formControlName="logisticsPartner">
+          @if (form.controls.logisticsPartner.hasError('required')) {
+            <mat-error>Logistics partner is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Expected Delivery</mat-label>
+          <input matInput formControlName="expectedDelivery" type="date">
+          @if (form.controls.expectedDelivery.hasError('required')) {
+            <mat-error>Expected delivery date is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">Line Items</h2>
+        <button mat-stroked-button type="button" (click)="addItem()">
+          <mat-icon>add</mat-icon> Add Item
+        </button>
+      </div>
+
+      @for (item of items.controls; track $index) {
+        <div class="item-row" [formGroup]="$any(item)">
+          <mat-form-field appearance="outline">
+            <mat-label>Commodity</mat-label>
+            <input matInput formControlName="commodityName">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Grade</mat-label>
+            <input matInput formControlName="grade">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Qty (kg)</mat-label>
+            <input matInput formControlName="quantity" type="number" min="0"
+                   (input)="updateTotal($index)">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Unit Price (₹)</mat-label>
+            <input matInput formControlName="unitPrice" type="number" min="0"
+                   (input)="updateTotal($index)">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Total (₹)</mat-label>
+            <input matInput formControlName="totalPrice" readonly>
+          </mat-form-field>
+
+          <button mat-icon-button type="button" color="warn"
+                  (click)="removeItem($index)" [disabled]="items.length === 1">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/orders">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Saving…' : (isEdit() ? 'Update Order' : 'Create Order') }}
+      </button>
+    </div>
+  </form>
+</div>

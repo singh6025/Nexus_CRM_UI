@@ -1,0 +1,158 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/orders"><mat-icon>arrow_back</mat-icon></button>
+    <h1 class="page-title">Order Detail</h1>
+    @if (order(); as o) {
+      <div class="header-actions">
+        @if (o.status !== 'delivered' && o.status !== 'cancelled') {
+          <button mat-stroked-button [routerLink]="['/orders', o.id, 'edit']">
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+          <button mat-stroked-button color="warn" (click)="cancelOrder()">
+            <mat-icon>cancel</mat-icon> Cancel
+          </button>
+        }
+        <button mat-stroked-button color="warn" (click)="deleteOrder()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (order(); as o) {
+    <div class="detail-grid">
+
+      <!-- Left column -->
+      <div class="left-col">
+        <!-- Status tracker -->
+        <mat-card class="tracker-card">
+          <mat-card-header>
+            <mat-card-title>
+              Order {{ o.orderNumber }}
+              <ui-badge [variant]="statusVariant(o.status)" style="margin-left:8px">
+                {{ statusLabel(o.status) }}
+              </ui-badge>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (o.status !== 'cancelled') {
+              <div class="status-track">
+                @for (cfg of activeStatuses; track cfg) {
+                  <div class="track-step"
+                       [class.done]="isStepDone(cfg, o.status)"
+                       [class.active]="isStepActive(cfg, o.status)"
+                       [style.--step-color]="statusColor(cfg)">
+                    <div class="step-circle">
+                      <mat-icon>{{ isStepDone(cfg, o.status) ? 'check' : stepIcon(cfg) }}</mat-icon>
+                    </div>
+                    <span class="step-label">{{ statusLabel(cfg) }}</span>
+                    @if (!$last) { <div class="step-line"></div> }
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="cancelled-msg"><mat-icon>cancel</mat-icon> This order has been cancelled.</p>
+            }
+
+            @if (canAdvance(o.status)) {
+              <button mat-flat-button color="primary" class="advance-btn" (click)="advanceStatus()">
+                <mat-icon>arrow_forward</mat-icon>
+                Mark as {{ statusLabel(activeStatuses[activeStatuses.indexOf(o.status) + 1]) }}
+              </button>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Order items -->
+        <mat-card>
+          <mat-card-header><mat-card-title>Items</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th>Commodity</th>
+                  <th>Grade</th>
+                  <th class="num">Qty (kg)</th>
+                  <th class="num">Unit Price</th>
+                  <th class="num">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of o.items; track item.commodityName) {
+                  <tr>
+                    <td>{{ item.commodityName }}</td>
+                    <td>{{ item.grade }}</td>
+                    <td class="num">{{ item.quantity | number }}</td>
+                    <td class="num">{{ item.unitPrice | currencyInr }}</td>
+                    <td class="num">{{ item.totalPrice | currencyInr }}</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4" class="total-label">Total Amount</td>
+                  <td class="num total-value">{{ o.totalAmount | currencyInr }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Right column -->
+      <div class="right-col">
+        <!-- Logistics info -->
+        <mat-card>
+          <mat-card-header><mat-card-title>Logistics</mat-card-title></mat-card-header>
+          <mat-card-content>
+            <div class="info-list">
+              <div class="info-row"><span class="lbl">Buyer</span><span>{{ o.buyerName }}</span></div>
+              <div class="info-row"><span class="lbl">Farmer</span><span>{{ o.farmerName }}</span></div>
+              <mat-divider></mat-divider>
+              <div class="info-row"><span class="lbl">Partner</span><span>{{ o.logisticsPartner || '—' }}</span></div>
+              <div class="info-row"><span class="lbl">Tracking #</span><span>{{ o.trackingNumber || '—' }}</span></div>
+              <div class="info-row"><span class="lbl">Expected</span><span>{{ o.expectedDelivery | date:'mediumDate' }}</span></div>
+              @if (o.actualDelivery) {
+                <div class="info-row"><span class="lbl">Delivered</span><span>{{ o.actualDelivery | date:'mediumDate' }}</span></div>
+              }
+              @if (o.notes) {
+                <mat-divider></mat-divider>
+                <div class="info-row notes"><span class="lbl">Notes</span><span>{{ o.notes }}</span></div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- POD Upload -->
+        <mat-card class="pod-card">
+          <mat-card-header><mat-card-title>Proof of Delivery</mat-card-title></mat-card-header>
+          <mat-card-content>
+            @if (o.podUrl) {
+              <div class="pod-uploaded">
+                <mat-icon class="pod-icon">task_alt</mat-icon>
+                <span>POD uploaded</span>
+                <a [href]="o.podUrl" target="_blank" mat-stroked-button>
+                  <mat-icon>open_in_new</mat-icon> View
+                </a>
+              </div>
+            } @else {
+              <p class="pod-empty">No POD uploaded yet.</p>
+            }
+            <button mat-stroked-button (click)="triggerPodUpload()" [disabled]="uploading()">
+              <mat-icon>upload_file</mat-icon>
+              {{ uploading() ? 'Uploading…' : (o.podUrl ? 'Replace POD' : 'Upload POD') }}
+            </button>
+            <input #podInput type="file" accept="image/*,application/pdf" style="display:none"
+                   (change)="onPodFileSelected($event)">
+            @if (uploading()) {
+              <mat-progress-bar mode="indeterminate" class="upload-bar"></mat-progress-bar>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+  }
+</div>
