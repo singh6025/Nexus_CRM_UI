@@ -1,4 +1,4 @@
-import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
+import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 import { CurrentUser, Tenant, TokenPair } from '../models/auth.models';
 
@@ -28,29 +28,16 @@ export const AuthStore = signalStore(
   })),
   withMethods((store) => ({
     setAuth(user: CurrentUser, tenant: Tenant, tokens: TokenPair): void {
-      (store as unknown as { $update: (s: Partial<AuthState>) => void }).$update?.({
-        currentUser: user,
-        tenant,
-        tokens,
-        isLoading: false,
-      });
+      patchState(store, { currentUser: user, tenant, tokens, isLoading: false });
     },
     clearAuth(): void {
-      (store as unknown as { $update: (s: Partial<AuthState>) => void }).$update?.({
-        currentUser: null,
-        tenant: null,
-        tokens: null,
-      });
+      patchState(store, { currentUser: null, tenant: null, tokens: null });
     },
     setLoading(isLoading: boolean): void {
-      (store as unknown as { $update: (s: Partial<AuthState>) => void }).$update?.({
-        isLoading,
-      });
+      patchState(store, { isLoading });
     },
     updateTokens(tokens: TokenPair): void {
-      (store as unknown as { $update: (s: Partial<AuthState>) => void }).$update?.({
-        tokens,
-      });
+      patchState(store, { tokens });
     },
   }))
 );

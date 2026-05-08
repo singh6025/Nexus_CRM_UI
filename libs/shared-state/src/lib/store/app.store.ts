@@ -1,4 +1,4 @@
-import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
+import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 
 export interface Notification {
@@ -33,34 +33,29 @@ export const AppStore = signalStore(
     unreadCount: computed(() => store.notifications().filter((n) => !n.read).length),
     unreadNotifications: computed(() => store.notifications().filter((n) => !n.read)),
   })),
-  withMethods((store) => {
-    type Updater = (s: Partial<AppState>) => void;
-    const update = () => (store as unknown as { $update: Updater }).$update;
-
-    return {
-      addNotification(notification: Notification): void {
-        update()?.({ notifications: [notification, ...store.notifications()] });
-      },
-      markAllRead(): void {
-        update()?.({ notifications: store.notifications().map((n) => ({ ...n, read: true })) });
-      },
-      markRead(id: string): void {
-        update()?.({
-          notifications: store.notifications().map((n) => (n.id === id ? { ...n, read: true } : n)),
-        });
-      },
-      setWsConnected(connected: boolean): void {
-        update()?.({ wsConnected: connected });
-      },
-      toggleSidenav(): void {
-        update()?.({ sidenavOpen: !store.sidenavOpen() });
-      },
-      setSidenavOpen(open: boolean): void {
-        update()?.({ sidenavOpen: open });
-      },
-      setGlobalLoading(loading: boolean): void {
-        update()?.({ globalLoading: loading });
-      },
-    };
-  })
+  withMethods((store) => ({
+    addNotification(notification: Notification): void {
+      patchState(store, { notifications: [notification, ...store.notifications()] });
+    },
+    markAllRead(): void {
+      patchState(store, { notifications: store.notifications().map((n) => ({ ...n, read: true })) });
+    },
+    markRead(id: string): void {
+      patchState(store, {
+        notifications: store.notifications().map((n) => (n.id === id ? { ...n, read: true } : n)),
+      });
+    },
+    setWsConnected(connected: boolean): void {
+      patchState(store, { wsConnected: connected });
+    },
+    toggleSidenav(): void {
+      patchState(store, { sidenavOpen: !store.sidenavOpen() });
+    },
+    setSidenavOpen(open: boolean): void {
+      patchState(store, { sidenavOpen: open });
+    },
+    setGlobalLoading(loading: boolean): void {
+      patchState(store, { globalLoading: loading });
+    },
+  }))
 );

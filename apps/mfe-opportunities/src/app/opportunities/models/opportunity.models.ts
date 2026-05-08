@@ -7,6 +7,7 @@ export type OpportunityStage =
   | 'closed_lost';
 
 export interface Opportunity {
+  [key: string]: unknown;
   id: string;
   name: string;
   company: string;

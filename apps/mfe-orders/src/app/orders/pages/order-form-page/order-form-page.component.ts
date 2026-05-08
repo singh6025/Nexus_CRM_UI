@@ -97,11 +97,11 @@ export class OrderFormPageComponent implements OnInit {
       expectedDelivery: raw.expectedDelivery!,
       notes:            raw.notes ?? '',
       items:            raw.items.map((i) => ({
-        commodityName: i.commodityName!,
-        grade:         i.grade!,
-        quantity:      Number(i.quantity),
-        unitPrice:     Number(i.unitPrice),
-        totalPrice:    Number(i.quantity) * Number(i.unitPrice),
+        commodityName: i['commodityName'] as string,
+        grade:         i['grade'] as string,
+        quantity:      Number(i['quantity']),
+        unitPrice:     Number(i['unitPrice']),
+        totalPrice:    Number(i['quantity']) * Number(i['unitPrice']),
       })),
     };
 
