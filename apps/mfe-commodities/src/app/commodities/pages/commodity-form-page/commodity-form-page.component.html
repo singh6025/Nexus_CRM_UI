@@ -1,0 +1,80 @@
+<div class="commodity-form-page">
+  <header class="page-header">
+    <button mat-icon-button routerLink="/commodities" aria-label="Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ isEdit() ? 'Edit Commodity' : 'Add Commodity' }}</h1>
+  </header>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="form-grid">
+          <!-- Name -->
+          <mat-form-field appearance="outline" class="span-2">
+            <mat-label>Commodity Name</mat-label>
+            <input matInput formControlName="name" />
+            @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+              <mat-error>Name is required</mat-error>
+            } @else if (form.get('name')?.hasError('minlength') && form.get('name')?.touched) {
+              <mat-error>At least 2 characters</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Category -->
+          <mat-form-field appearance="outline">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (cat of categories; track cat.value) {
+                <mat-option [value]="cat.value">{{ cat.label }}</mat-option>
+              }
+            </mat-select>
+            @if (form.get('category')?.hasError('required') && form.get('category')?.touched) {
+              <mat-error>Category is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Grade -->
+          <mat-form-field appearance="outline">
+            <mat-label>Grade</mat-label>
+            <mat-select formControlName="grade">
+              @for (g of grades; track g.value) {
+                <mat-option [value]="g.value">{{ g.label }}</mat-option>
+              }
+            </mat-select>
+            @if (form.get('grade')?.hasError('required') && form.get('grade')?.touched) {
+              <mat-error>Grade is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Unit -->
+          <mat-form-field appearance="outline">
+            <mat-label>Unit</mat-label>
+            <input matInput formControlName="unit" placeholder="e.g. quintal, kg, ton" />
+            @if (form.get('unit')?.hasError('required') && form.get('unit')?.touched) {
+              <mat-error>Unit is required</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Current Price -->
+          <mat-form-field appearance="outline">
+            <mat-label>Current Price (₹)</mat-label>
+            <input matInput formControlName="currentPrice" type="number" min="0" />
+            @if (form.get('currentPrice')?.hasError('required') && form.get('currentPrice')?.touched) {
+              <mat-error>Price is required</mat-error>
+            } @else if (form.get('currentPrice')?.hasError('positiveNumber') && form.get('currentPrice')?.touched) {
+              <mat-error>Price must be greater than zero</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <a mat-stroked-button routerLink="/commodities">Cancel</a>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
+            @if (loading()) { Saving… } @else { {{ isEdit() ? 'Update' : 'Create' }} Commodity }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

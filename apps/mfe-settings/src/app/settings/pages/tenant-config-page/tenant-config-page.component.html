@@ -1,0 +1,66 @@
+<div class="tenant-config-page">
+  <header class="page-header">
+    <button mat-icon-button routerLink="/settings" aria-label="Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Tenant Configuration</h1>
+  </header>
+
+  @if (loading()) {
+    <p class="loading">Loading…</p>
+  } @else {
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="form-grid">
+            <!-- Org name -->
+            <mat-form-field appearance="outline" class="span-2">
+              <mat-label>Organisation Name</mat-label>
+              <input matInput formControlName="name" />
+              @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+                <mat-error>Organisation name is required</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Domain -->
+            <mat-form-field appearance="outline" class="span-2">
+              <mat-label>Domain</mat-label>
+              <input matInput formControlName="domain" placeholder="e.g. farmsiddhi.in" />
+              @if (form.get('domain')?.hasError('required') && form.get('domain')?.touched) {
+                <mat-error>Domain is required</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Timezone -->
+            <mat-form-field appearance="outline">
+              <mat-label>Timezone</mat-label>
+              <mat-select formControlName="timezone">
+                @for (tz of timezones; track tz) {
+                  <mat-option [value]="tz">{{ tz }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Currency -->
+            <mat-form-field appearance="outline">
+              <mat-label>Currency</mat-label>
+              <input matInput formControlName="currency" placeholder="e.g. INR" />
+            </mat-form-field>
+
+            <!-- Default lead assignee -->
+            <mat-form-field appearance="outline" class="span-2">
+              <mat-label>Default Lead Assignee ID</mat-label>
+              <input matInput formControlName="defaultLeadAssigneeId" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="saving()">
+              @if (saving()) { Saving… } @else { Save Configuration }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

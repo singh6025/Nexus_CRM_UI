@@ -1,0 +1,70 @@
+<div class="users-page">
+  <header class="page-header">
+    <div class="header-left">
+      <button mat-icon-button routerLink="/settings" aria-label="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Users &amp; Roles</h1>
+    </div>
+    <button mat-raised-button color="primary" (click)="showInvite.set(!showInvite())">
+      <mat-icon>person_add</mat-icon> Invite User
+    </button>
+  </header>
+
+  @if (showInvite()) {
+    <mat-card class="invite-card">
+      <mat-card-header>
+        <mat-card-title>Invite Team Member</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="inviteForm" (ngSubmit)="submitInvite()" novalidate class="invite-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+            @if (inviteForm.get('name')?.hasError('required') && inviteForm.get('name')?.touched) {
+              <mat-error>Name is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" />
+            @if (inviteForm.get('email')?.hasError('required') && inviteForm.get('email')?.touched) {
+              <mat-error>Email is required</mat-error>
+            } @else if (inviteForm.get('email')?.hasError('email') && inviteForm.get('email')?.touched) {
+              <mat-error>Enter a valid email</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role">
+              @for (opt of roleOptions; track opt.value) {
+                <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="invite-actions">
+            <button mat-stroked-button type="button" (click)="showInvite.set(false)">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="inviting()">
+              @if (inviting()) { Sending… } @else { Send Invite }
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <farmeasy-data-table
+    [columns]="columns"
+    [data]="users()"
+    [total]="total()"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [loading]="loading()"
+    [actions]="actions"
+    (sortChange)="onSort($event)"
+    (pageChange)="onPage($event)"
+  />
+</div>

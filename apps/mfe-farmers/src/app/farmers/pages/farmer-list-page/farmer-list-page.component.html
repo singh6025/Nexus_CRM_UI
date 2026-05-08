@@ -1,0 +1,49 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Farmers</h1>
+      <p class="page-subtitle">{{ total() }} farmers in network</p>
+    </div>
+    <button mat-raised-button color="primary" routerLink="new">
+      <mat-icon>person_add</mat-icon> Add Farmer
+    </button>
+  </div>
+
+  <div class="filter-row" [formGroup]="filters">
+    <mat-form-field appearance="outline" class="filter-search">
+      <mat-label>Search</mat-label>
+      <input matInput formControlName="search" placeholder="Name, phone, village…">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (opt of statusOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>District</mat-label>
+      <input matInput formControlName="district" placeholder="Filter by district">
+    </mat-form-field>
+  </div>
+
+  <div class="table-card">
+    <ui-data-table
+      [columns]="columns"
+      [data]="farmers()"
+      [total]="total()"
+      [page]="page()"
+      [pageSize]="pageSize()"
+      [loading]="loading()"
+      [actions]="actions"
+      [rowClickable]="true"
+      emptyMessage="No farmers found"
+      (sortChange)="onSort($event)"
+      (pageChange)="onPage($event)">
+    </ui-data-table>
+  </div>
+</div>

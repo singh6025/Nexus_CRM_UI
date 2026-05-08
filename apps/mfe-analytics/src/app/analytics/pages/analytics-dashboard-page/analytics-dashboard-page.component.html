@@ -1,0 +1,123 @@
+<div class="analytics-dashboard-page">
+  <header class="page-header">
+    <h1>Analytics</h1>
+    <a mat-stroked-button routerLink="/analytics/supply-demand">
+      <mat-icon>swap_vert</mat-icon> Supply &amp; Demand
+    </a>
+  </header>
+
+  @if (loading()) {
+    <p class="loading">Loading…</p>
+  } @else if (dashboard(); as d) {
+    <!-- KPI row -->
+    <div class="kpi-row">
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <span class="kpi-label">Total Revenue</span>
+          <span class="kpi-value">{{ d.totalRevenue | currencyInr }}</span>
+          <span class="kpi-sub" [class]="growthClass(d.revenueGrowthPct)">
+            <mat-icon>{{ growthIcon(d.revenueGrowthPct) }}</mat-icon>
+            {{ d.revenueGrowthPct | number:'1.1-1' }}% vs last period
+          </span>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <span class="kpi-label">Total Orders</span>
+          <span class="kpi-value">{{ d.totalOrders | number }}</span>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <span class="kpi-label">Active Leads</span>
+          <span class="kpi-value">{{ d.activeLeads | number }}</span>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <span class="kpi-label">Conversion Rate</span>
+          <span class="kpi-value">{{ d.conversionRate | number:'1.1-1' }}%</span>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="kpi-card">
+        <mat-card-content>
+          <span class="kpi-label">Avg Deal Size</span>
+          <span class="kpi-value">{{ d.avgDealSize | currencyInr }}</span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="charts-grid">
+      <!-- Revenue Trend -->
+      <mat-card class="card-wide">
+        <mat-card-header>
+          <mat-card-title>Revenue Trend</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="bar-chart">
+            @for (t of d.revenueTrends; track t.period) {
+              <div class="bar-col">
+                <span class="bar-val">{{ t.revenue | currencyInr }}</span>
+                <div class="bar-track">
+                  <div class="bar-fill"
+                       [style.height.%]="(t.revenue / maxRevenue(d)) * 100">
+                  </div>
+                </div>
+                <span class="bar-label">{{ t.period }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Lead Funnel -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Lead Funnel</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="funnel-list">
+            @for (stage of d.funnelStages; track stage.stage) {
+              <div class="funnel-row">
+                <span class="funnel-label">{{ stage.stage }}</span>
+                <div class="funnel-bar-wrap">
+                  <div class="funnel-bar"
+                       [style.width.%]="(stage.count / maxFunnelCount(d)) * 100">
+                  </div>
+                </div>
+                <span class="funnel-count">{{ stage.count }}</span>
+                <span class="funnel-rate">{{ stage.conversionRate | number:'1.0-0' }}%</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Top Commodities -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Top Commodities by Revenue</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="commodity-list">
+            @for (c of d.topCommodities; track c.name) {
+              <div class="commodity-row">
+                <span class="commodity-name">{{ c.name }}</span>
+                <div class="commodity-bar-wrap">
+                  <div class="commodity-bar"
+                       [style.width.%]="(c.revenue / maxCommodityRevenue(d)) * 100">
+                  </div>
+                </div>
+                <span class="commodity-val">{{ c.revenue | currencyInr }}</span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

@@ -1,0 +1,46 @@
+<div class="commodity-list-page">
+  <header class="page-header">
+    <h1>Commodities</h1>
+    <a mat-raised-button color="primary" routerLink="/commodities/new">
+      <mat-icon>add</mat-icon> Add Commodity
+    </a>
+  </header>
+
+  <div class="filters" [formGroup]="filters">
+    <mat-form-field appearance="outline" class="filter-search">
+      <mat-label>Search</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput formControlName="search" placeholder="Commodity name…" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        @for (opt of categoryOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Grade</mat-label>
+      <mat-select formControlName="grade">
+        @for (opt of gradeOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <farmeasy-data-table
+    [columns]="columns"
+    [data]="commodities()"
+    [total]="total()"
+    [page]="page()"
+    [pageSize]="pageSize()"
+    [loading]="loading()"
+    [actions]="actions"
+    (sortChange)="onSort($event)"
+    (pageChange)="onPage($event)"
+  />
+</div>

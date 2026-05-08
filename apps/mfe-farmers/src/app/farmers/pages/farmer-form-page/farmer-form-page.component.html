@@ -1,0 +1,97 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/farmers"><mat-icon>arrow_back</mat-icon></button>
+    <h1 class="page-title">{{ isEdit() ? 'Edit Farmer' : 'Add Farmer' }}</h1>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-card">
+    <h2 class="section-title">Personal Info</h2>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="name">
+        @if (form.controls.name.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+        @if (form.controls.phone.hasError('invalidPhone')) {
+          <mat-error>Enter a valid 10-digit Indian number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email (optional)</mat-label>
+        <input matInput formControlName="email" type="email">
+        @if (form.controls.email.hasError('email')) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned Agent ID</mat-label>
+        <input matInput formControlName="assignedAgentId">
+        @if (form.controls.assignedAgentId.hasError('required')) {
+          <mat-error>Agent is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <h2 class="section-title">Location</h2>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Village</mat-label>
+        <input matInput formControlName="village">
+        @if (form.controls.village.hasError('required')) {
+          <mat-error>Village is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>District</mat-label>
+        <input matInput formControlName="district">
+        @if (form.controls.district.hasError('required')) {
+          <mat-error>District is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <input matInput formControlName="state">
+        @if (form.controls.state.hasError('required')) {
+          <mat-error>State is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <h2 class="section-title">Farm Details</h2>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Land Size</mat-label>
+        <input matInput formControlName="landSize" type="number" min="0">
+        @if (form.controls.landSize.hasError('positiveNumber')) {
+          <mat-error>Must be a positive number</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Unit</mat-label>
+        <mat-select formControlName="landUnit">
+          @for (u of landUnits; track u) {
+            <mat-option [value]="u">{{ u | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/farmers">Cancel</button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Saving…' : (isEdit() ? 'Update Farmer' : 'Add Farmer') }}
+      </button>
+    </div>
+  </form>
+</div>
