@@ -1,0 +1,115 @@
+<div class="page-container">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/farmers"><mat-icon>arrow_back</mat-icon></button>
+    <h1 class="page-title">Farmer Profile</h1>
+    @if (farmer(); as f) {
+      <div class="header-actions">
+        <button mat-stroked-button [routerLink]="['/farmers', f.id, 'edit']">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="loading-msg">Loading…</p>
+  } @else if (farmer(); as f) {
+    <div class="detail-grid">
+
+      <!-- Profile card -->
+      <mat-card class="profile-card">
+        <mat-card-header>
+          <div class="avatar">{{ f.name[0] }}</div>
+          <div>
+            <mat-card-title>{{ f.name }}</mat-card-title>
+            <mat-card-subtitle>{{ f.village }}, {{ f.district }}, {{ f.state }}</mat-card-subtitle>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="lbl">Phone</span>
+              <span>{{ f.phone }}</span>
+            </div>
+            <div class="info-item">
+              <span class="lbl">Email</span>
+              <span>{{ f.email || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="lbl">Land</span>
+              <span>{{ f.landSize }} {{ f.landUnit }}</span>
+            </div>
+            <div class="info-item">
+              <span class="lbl">Agent</span>
+              <span>{{ f.assignedAgentName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="lbl">Onboarded</span>
+              <span>{{ f.onboardedAt | date:'mediumDate' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="lbl">Status</span>
+              <mat-select [value]="f.status" (selectionChange)="onStatusChange($event.value)" class="status-select">
+                @for (s of statusOptions; track s) {
+                  <mat-option [value]="s">{{ statusConfig[s].label }}</mat-option>
+                }
+              </mat-select>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Stats + Commodities -->
+      <div class="right-col">
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-value">{{ f.totalSupplyKg / 1000 | number:'1.1-1' }} MT</span>
+            <span class="stat-label">Total Supply</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ f.totalRevenueGenerated | currencyInr }}</span>
+            <span class="stat-label">Revenue Generated</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">{{ f.commodities.length }}</span>
+            <span class="stat-label">Commodities</span>
+          </div>
+        </div>
+
+        <mat-card>
+          <mat-card-header><mat-card-title>Commodity Links</mat-card-title></mat-card-header>
+          <mat-card-content>
+            @if (f.commodities.length === 0) {
+              <p class="empty-msg">No commodities linked yet.</p>
+            } @else {
+              <table class="commodity-table">
+                <thead>
+                  <tr>
+                    <th>Commodity</th>
+                    <th>Grade</th>
+                    <th class="num">Annual Supply</th>
+                    <th>Last Supply</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (c of f.commodities; track c.commodityId) {
+                    <tr>
+                      <td>{{ c.commodityName }}</td>
+                      <td>{{ c.grade }}</td>
+                      <td class="num">{{ c.annualSupplyKg / 1000 | number:'1.1-1' }} MT</td>
+                      <td>{{ c.lastSupplyDate | date:'mediumDate' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+    </div>
+  }
+</div>
