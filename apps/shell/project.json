@@ -35,7 +35,7 @@
         },
         "development": {
           "buildOptimizer": false, "optimization": false,
-          "vendorChunk": true, "extractLicenses": false,
+          "vendorChunk": false, "extractLicenses": false,
           "sourceMap": true, "namedChunks": true
         }
       },

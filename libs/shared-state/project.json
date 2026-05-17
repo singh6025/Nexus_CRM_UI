@@ -5,7 +5,7 @@
   "sourceRoot": "libs/shared-state/src",
   "prefix": "farmeasy",
   "targets": {
-    "build": {
+    "_build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {

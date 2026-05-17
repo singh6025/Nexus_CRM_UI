@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "nx serve shell",
-    "start:dashboard": "nx serve mfe-dashboard --port=4200",
+    "start:dashboard": "nx serve mfe-dashboard --port=4202 --host=127.0.0.1",
     "start:leads": "nx serve mfe-leads --port=4203",
     "start:opportunities": "nx serve mfe-opportunities --port=4204",
     "start:orders": "nx serve mfe-orders --port=4205",
